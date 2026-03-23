@@ -22,7 +22,7 @@ Resources:
         IndexDocument: index.html
 
   #-----------------------------------------------------------------------------
-  # Resource policy to make SurveyFrontendBucket objects publicly accessible
+  # Policy to make SurveyFrontendBucket objects publicly accessible
   SurveyFrontendBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -48,12 +48,12 @@ Resources:
 
   #-----------------------------------------------------------------------------
   # Lambda function to store form data in database
-  SubmitHandlerFunction:
+  SubmitSurveyFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: SubmitHandler
+      FunctionName: SubmitSurvey
       Runtime: nodejs22.x
-      CodeUri: src/submitHandler/
+      CodeUri: lambdas/submitSurvey/
       Handler: index.handler
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
       # Environment variables to be defined when the lambda runs
@@ -62,7 +62,7 @@ Resources:
           TABLE_NAME: !Ref SurveyResponsesTable
       # Triggered by API Gateway when form submission is received
       Events:
-        SubmitSurvey:
+        SubmitSurveyEvent:
           Type: Api
           Properties:
             RestApiId: !Ref SurveyApi
@@ -90,12 +90,12 @@ Resources:
 
   #-----------------------------------------------------------------------------
   # Lambda function to aggregate survey statistics into S3
-  BatchProcessorFunction:
+  AggregateStatsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: BatchProcessor
+      FunctionName: AggregateStats
       Runtime: nodejs22.x
-      CodeUri: src/batchProcessor/
+      CodeUri: lambdas/aggregateStats/
       Handler: index.handler
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
       # Only one instance may run at a time
