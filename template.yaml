@@ -53,7 +53,7 @@ Resources:
     Properties:
       FunctionName: SubmitSurvey
       Runtime: nodejs22.x
-      CodeUri: lambdas/submitSurvey/
+      CodeUri: lambdas/SubmitSurvey/
       Handler: index.handler
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
       # Environment variables to be defined when the lambda runs
@@ -95,7 +95,7 @@ Resources:
     Properties:
       FunctionName: AggregateStats
       Runtime: nodejs22.x
-      CodeUri: lambdas/aggregateStats/
+      CodeUri: lambdas/AggregateStats/
       Handler: index.handler
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
       # Only one instance may run at a time
